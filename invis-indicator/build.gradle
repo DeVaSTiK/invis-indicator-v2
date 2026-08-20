@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.15.+'
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -11,15 +11,11 @@ base {
 }
 
 repositories {
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
+    // Loom уже добавляет нужные Maven-репозитории для Minecraft/Fabric сам.
 }
 
-// Начиная с 26.1 Minecraft поставляется без обфускации, поэтому Loom больше
-// не ремапит джарники: используем implementation вместо modImplementation,
-// а таск сборки называется просто jar (не remapJar).
+// Начиная с 26.1 Minecraft без обфускации, и Mojang-маппинги для него не
+// публикуются (они не нужны) — поэтому блока "mappings" здесь нет вообще.
 loom {
     splitEnvironmentSourceSets()
 
@@ -31,33 +27,28 @@ loom {
     }
 }
 
-sourceSets {
-    client {
-        compileClasspath += main.compileClasspath
-        runtimeClasspath += main.runtimeClasspath
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    def version = project.version
+    inputs.property "version", version
+    filesMatching("fabric.mod.json") {
+        expand "version": version
     }
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    // Официальные маппинги Mojang — с 26.1 это единственный поддерживаемый вариант,
-    // Yarn для этой версии больше не публикуется.
-    mappings loom.officialMojangMappings()
-
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    clientImplementation sourceSets.main.output
-}
-
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = Integer.parseInt(project.java_version)
+    it.options.release = 25
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.toVersion(project.java_version)
-    targetCompatibility = JavaVersion.toVersion(project.java_version)
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {
