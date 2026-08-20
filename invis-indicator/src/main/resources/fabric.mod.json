@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "invisindicator",
+  "version": "${version}",
+  "name": "Invis Indicator",
+  "description": "Показывает кольцо-индикатор над игроками, ставшими невидимыми. Не раскрывает точную модель/хитбокс и не работает сквозь стены.",
+  "authors": ["you"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/invisindicator/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ru.holyworld.invisindicator.InvisIndicatorClient"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~26.1",
+    "fabric-api": "*"
+  }
+}

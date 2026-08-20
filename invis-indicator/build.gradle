@@ -1,0 +1,67 @@
+plugins {
+    id 'fabric-loom' version "${project.loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+// Начиная с 26.1 Minecraft поставляется без обфускации, поэтому Loom больше
+// не ремапит джарники: используем implementation вместо modImplementation,
+// а таск сборки называется просто jar (не remapJar).
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "invisindicator" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+sourceSets {
+    client {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // Официальные маппинги Mojang — с 26.1 это единственный поддерживаемый вариант,
+    // Yarn для этой версии больше не публикуется.
+    mappings loom.officialMojangMappings()
+
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    clientImplementation sourceSets.main.output
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = Integer.parseInt(project.java_version)
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+}
