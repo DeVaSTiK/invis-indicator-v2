@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.player.Player;
 
@@ -55,10 +55,7 @@ public final class RingRenderer {
             InvisIndicatorClient.LOGGER.info("Invis Indicator: spawning ring for invisible player {}", player.getName().getString());
         }
 
-        float r = ((cfg.colorRgb >> 16) & 0xFF) / 255f;
-        float g = ((cfg.colorRgb >> 8) & 0xFF) / 255f;
-        float b = (cfg.colorRgb & 0xFF) / 255f;
-        ColorParticleOption color = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, r, g, b);
+        ParticleOptions particle = resolveParticle(cfg.particleStyle);
 
         double centerX = player.getX();
         double centerY = player.getY() + player.getBbHeight() + cfg.heightOffset;
@@ -68,7 +65,12 @@ public final class RingRenderer {
             double angle = (Math.PI * 2 * i) / SEGMENTS;
             double x = centerX + Math.cos(angle) * cfg.radius;
             double z = centerZ + Math.sin(angle) * cfg.radius;
-            level.addParticle(color, x, centerY, z, 0.0, 0.0, 0.0);
+            level.addParticle(particle, x, centerY, z, 0.0, 0.0, 0.0);
         }
     }
-}
+
+    private static ParticleOptions resolveParticle(String style) {
+        return switch (style == null ? "" : style.toLowerCase()) {
+            case "purple" -> ParticleTypes.WITCH;
+            case "green" -> ParticleTypes.HAPPY_VILLAGER;
+            case "blue" ->
