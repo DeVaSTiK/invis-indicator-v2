@@ -15,6 +15,7 @@ public final class RingRenderer {
     private static final int SEGMENTS = 20;
 
     private static int tickCounter = 0;
+    private static boolean loggedOnce = false;
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(RingRenderer::onEndClientTick);
@@ -48,7 +49,13 @@ public final class RingRenderer {
     }
 
     private static void spawnRing(ClientLevel level, Player player, Config cfg) {
-        DustParticleOptions dust = new DustParticleOptions(cfg.colorRgb, 1.3f);
+        if (!loggedOnce) {
+            loggedOnce = true;
+            InvisIndicatorClient.LOGGER.info("Invis Indicator: spawning ring for invisible player {}", player.getName().getString());
+        }
+
+        int argb = 0xFF000000 | (cfg.colorRgb & 0xFFFFFF);
+        DustParticleOptions dust = new DustParticleOptions(argb, 1.3f);
 
         double centerX = player.getX();
         double centerY = player.getY() + player.getBbHeight() + cfg.heightOffset;
