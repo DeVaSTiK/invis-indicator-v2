@@ -6,7 +6,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.entity.player.Player;
-import org.joml.Vector3f;
 
 public final class RingRenderer {
 
@@ -49,11 +48,7 @@ public final class RingRenderer {
     }
 
     private static void spawnRing(ClientLevel level, Player player, Config cfg) {
-        float r = ((cfg.colorRgb >> 16) & 0xFF) / 255f;
-        float g = ((cfg.colorRgb >> 8) & 0xFF) / 255f;
-        float b = (cfg.colorRgb & 0xFF) / 255f;
-
-        DustParticleOptions dust = new DustParticleOptions(new Vector3f(r, g, b), 1.3f);
+        DustParticleOptions dust = new DustParticleOptions(cfg.colorRgb, 1.3f);
 
         double centerX = player.getX();
         double centerY = player.getY() + player.getBbHeight() + cfg.heightOffset;
