@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.player.Player;
 
 public final class RingRenderer {
@@ -54,9 +54,6 @@ public final class RingRenderer {
             InvisIndicatorClient.LOGGER.info("Invis Indicator: spawning ring for invisible player {}", player.getName().getString());
         }
 
-        int argb = 0xFF000000 | (cfg.colorRgb & 0xFFFFFF);
-        DustParticleOptions dust = new DustParticleOptions(argb, 1.3f);
-
         double centerX = player.getX();
         double centerY = player.getY() + player.getBbHeight() + cfg.heightOffset;
         double centerZ = player.getZ();
@@ -65,7 +62,7 @@ public final class RingRenderer {
             double angle = (Math.PI * 2 * i) / SEGMENTS;
             double x = centerX + Math.cos(angle) * cfg.radius;
             double z = centerZ + Math.sin(angle) * cfg.radius;
-            level.addParticle(dust, x, centerY, z, 0.0, 0.0, 0.0);
+            level.addParticle(ParticleTypes.END_ROD, x, centerY, z, 0.0, 0.0, 0.0);
         }
     }
 }
