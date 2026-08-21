@@ -73,4 +73,10 @@ public final class RingRenderer {
         return switch (style == null ? "" : style.toLowerCase()) {
             case "purple" -> ParticleTypes.WITCH;
             case "green" -> ParticleTypes.HAPPY_VILLAGER;
-            case "blue" ->
+            case "blue" -> ParticleTypes.SOUL_FIRE_FLAME;
+            case "white", "pink" -> ParticleTypes.END_ROD;
+            case "red", "orange" -> ParticleTypes.FLAME;
+            default -> ParticleTypes.FLAME;
+        };
+    }
+}
