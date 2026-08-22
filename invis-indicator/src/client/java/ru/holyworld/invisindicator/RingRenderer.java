@@ -12,8 +12,8 @@ public final class RingRenderer {
 
     private RingRenderer() {}
 
-    private static final int SPAWN_INTERVAL_TICKS = 4;
-    private static final int SEGMENTS = 20;
+    private static final int SPAWN_INTERVAL_TICKS = 1;
+    private static final int SEGMENTS = 8;
 
     private static int tickCounter = 0;
     private static boolean loggedOnce = false;
@@ -72,11 +72,11 @@ public final class RingRenderer {
     private static ParticleOptions resolveParticle(String style) {
         return switch (style == null ? "" : style.toLowerCase()) {
             case "purple" -> ParticleTypes.PORTAL;
-            case "green" -> ParticleTypes.HAPPY_VILLAGER;
+            case "red", "orange" -> ParticleTypes.CRIMSON_SPORE;
             case "blue" -> ParticleTypes.WARPED_SPORE;
             case "white", "pink" -> ParticleTypes.END_ROD;
-            case "red", "orange" -> ParticleTypes.CRIMSON_SPORE;
-            default -> ParticleTypes.CRIMSON_SPORE;
+            case "green" -> ParticleTypes.HAPPY_VILLAGER;
+            default -> ParticleTypes.HAPPY_VILLAGER;
         };
     }
 }
