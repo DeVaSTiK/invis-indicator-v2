@@ -75,8 +75,8 @@ public final class RingRenderer {
             case "red", "orange" -> ParticleTypes.CRIMSON_SPORE;
             case "blue" -> ParticleTypes.WARPED_SPORE;
             case "white", "pink" -> ParticleTypes.END_ROD;
-            case "green" -> ParticleTypes.HAPPY_VILLAGER;
-            default -> ParticleTypes.HAPPY_VILLAGER;
+             case "green" -> ParticleTypes.COMPOSTER;
+            default -> ParticleTypes.COMPOSTER;
         };
     }
 }
